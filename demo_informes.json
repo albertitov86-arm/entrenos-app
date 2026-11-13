@@ -1,0 +1,166 @@
+[
+  {
+    "id": 4,
+    "fecha": "2026-11-22",
+    "nombre": "Salida larga por la sierra",
+    "tipo": "MountainBikeRide",
+    "duracion_min": 240,
+    "tss": 190,
+    "np": 158,
+    "avg": null,
+    "if": 0.74,
+    "fc_media": 132,
+    "cadencia": null,
+    "decoupling": 3.1,
+    "rpe": 6,
+    "ftp": 214,
+    "eftp": 228,
+    "planificado": null,
+    "intervalos": [],
+    "veredicto": "Salida libre (no planificada)",
+    "nota": null,
+    "logros": [
+      "Salida larga de 4.0 h: clave para la resistencia de las pruebas",
+      "Deriva cardíaca 3.1 %: buena resistencia aeróbica"
+    ],
+    "mejoras": [
+      "intervals.icu estima tu FTP en 228 W (usas 214 W). Si te ves fuerte, actualízalo en Settings."
+    ]
+  },
+  {
+    "id": 2,
+    "fecha": "2026-11-19",
+    "nombre": "VO2max N2",
+    "tipo": "VirtualRide",
+    "duracion_min": 60,
+    "tss": 74,
+    "np": 187,
+    "avg": null,
+    "if": 0.87,
+    "fc_media": 150,
+    "cadencia": null,
+    "decoupling": 6.5,
+    "rpe": 8,
+    "ftp": 214,
+    "eftp": null,
+    "planificado": "VO2max N2",
+    "intervalos": [
+      {
+        "n": 1,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": "250 W",
+        "estado": "ok",
+        "fc": 160,
+        "cad": null,
+        "dur": 180
+      },
+      {
+        "n": 2,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": "246 W",
+        "estado": "ok",
+        "fc": 163,
+        "cad": null,
+        "dur": 180
+      },
+      {
+        "n": 3,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": "240 W",
+        "estado": "ok",
+        "fc": 166,
+        "cad": null,
+        "dur": 180
+      },
+      {
+        "n": 4,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": "232 W",
+        "estado": "ok",
+        "fc": 169,
+        "cad": null,
+        "dur": 180
+      },
+      {
+        "n": 5,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": "225 W",
+        "estado": "bajo",
+        "fc": 171,
+        "cad": null,
+        "dur": 180
+      },
+      {
+        "n": 6,
+        "obj": "235–246 W",
+        "dur_obj": 180,
+        "real": null,
+        "estado": "no hecho"
+      }
+    ],
+    "veredicto": "🟡 Cumplido en parte",
+    "nota": 82,
+    "logros": [
+      "5/6 bloques de trabajo hechos, 4 en el rango de vatios"
+    ],
+    "mejoras": [
+      "Faltó 1 bloque. Si fue por cansancio, mejor cortar que hacerlos mal; si fue por tiempo, prioriza el bloque principal.",
+      "La potencia cayó un 10% del primer al último bloque: empieza en la parte baja del rango para llegar entero al final.",
+      "El pulso subió 11 ppm del primer al último bloque a potencia similar: ojo a la hidratación, el calor o la fatiga acumulada.",
+      "Deriva cardíaca 6.5 % (>5 %): falta base aeróbica para esa intensidad o influyó el calor, la hidratación o la nutrición."
+    ]
+  },
+  {
+    "id": "demo1",
+    "fecha": "2026-11-17",
+    "nombre": "Sweet Spot N2",
+    "tipo": "VirtualRide",
+    "duracion_min": 60,
+    "tss": 68,
+    "np": 178,
+    "avg": 165,
+    "if": 0.83,
+    "fc_media": 141,
+    "cadencia": 88,
+    "decoupling": 3.4,
+    "rpe": null,
+    "ftp": 214,
+    "eftp": null,
+    "planificado": "Sweet Spot N2",
+    "intervalos": [
+      {
+        "n": 1,
+        "obj": "188–199 W",
+        "dur_obj": 900,
+        "real": "192 W",
+        "estado": "ok",
+        "fc": 148,
+        "cad": 89,
+        "dur": 905
+      },
+      {
+        "n": 2,
+        "obj": "188–199 W",
+        "dur_obj": 900,
+        "real": "186 W",
+        "estado": "ok",
+        "fc": 156,
+        "cad": 87,
+        "dur": 898
+      }
+    ],
+    "veredicto": "✅ Objetivo cumplido",
+    "nota": 100,
+    "logros": [
+      "2/2 bloques de trabajo hechos, 2 en el rango de vatios"
+    ],
+    "mejoras": [
+      "Apunta el esfuerzo percibido (RPE) en intervals.icu: afina mucho los informes."
+    ]
+  }
+]

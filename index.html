@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<title>Entrenos · Vatios</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#0e1116;--card:#171b22;--card2:#1f2530;--line:#2a313d;--tx:#e8ebf0;--mut:#8b95a5;
+  --acc:#f5823a;--ok:#3cbe78;--warn:#f0c83c;--bad:#e64646;
+  --z1:#7b8496;--z2:#4682dc;--z3:#3cbe78;--z4:#f0c83c;--z5:#f5823a;--z6:#e64646;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:rgba(14,17,22,.92);backdrop-filter:blur(8px);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+header h1{font-size:17px;margin:0;flex:1;letter-spacing:.2px}
+header .pill{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--card2);color:var(--mut)}
+main{padding:14px 14px calc(90px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:var(--card);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav button{background:none;border:0;color:var(--mut);padding:10px 0 9px;font-size:11.5px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:22px;height:22px}
+nav button.on{color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px}
+.sp{flex:1}
+.mut{color:var(--mut)} .sm{font-size:12.5px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);margin:18px 4px 8px;font-weight:600}
+.big{font-size:22px;font-weight:700;line-height:1.2}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.chip{background:var(--card2);border-radius:12px;padding:8px 10px}
+.chip b{display:block;font-size:17px}
+.chip span{font-size:11.5px;color:var(--mut)}
+.note{background:rgba(240,200,60,.1);border-left:3px solid var(--warn);padding:8px 10px;border-radius:8px;font-size:13.5px;margin-top:8px}
+.badge{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:99px}
+.b-ok{background:rgba(60,190,120,.15);color:var(--ok)} .b-warn{background:rgba(240,200,60,.15);color:var(--warn)} .b-bad{background:rgba(230,70,70,.15);color:var(--bad)}
+.ses-date{font-size:12px;color:var(--acc);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.ses-title{font-size:18px;font-weight:700;margin:2px 0}
+svg.prof{width:100%;height:92px;display:block;margin:10px 0 4px}
+details summary{cursor:pointer;color:var(--mut);font-size:13px;margin-top:6px;list-style:none}
+details summary::before{content:"▸ "} details[open] summary::before{content:"▾ "}
+pre{white-space:pre-wrap;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;background:var(--card2);padding:10px;border-radius:10px;margin:8px 0 0;color:#cfd5df}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 12px}
+button.b{border:0;border-radius:12px;padding:13px 12px;font-weight:700;font-size:14.5px;color:var(--tx);background:var(--card2)}
+button.b.pri{background:var(--acc);color:#1a0f06}
+button.b:disabled{opacity:.5}
+button.lnk{background:none;border:0;color:var(--acc);font-weight:600;padding:6px 0;font-size:14px}
+button.del{background:none;border:0;color:var(--mut);font-size:20px;padding:0 4px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+input[type=checkbox]{width:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card2);border-radius:10px;padding:3px;gap:3px}
+.seg button{border:0;background:none;color:var(--mut);padding:8px 0;border-radius:8px;font-weight:600;font-size:13px}
+.seg button.on.leve{background:var(--warn);color:#201a05}.seg button.on.moderada{background:var(--acc);color:#1a0f06}.seg button.on.grave{background:var(--bad);color:#fff}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.days button{border:1px solid var(--line);background:var(--card2);color:var(--mut);border-radius:10px;padding:10px 0;font-weight:700}
+.days button.on{background:var(--acc);color:#1a0f06;border-color:var(--acc)}
+.sw{position:relative;width:46px;height:28px;flex:none}
+.sw input{opacity:0;width:0;height:0}
+.sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.2s}
+.sw i::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+i{background:var(--ok)} .sw input:checked+i::after{transform:translateX(18px)}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#fff;color:#111;
+  padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:9;box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center}
+.run{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);margin:-4px 2px 12px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mut)}
+.dot.run{background:var(--warn);animation:p 1s infinite}.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}
+@keyframes p{50%{opacity:.3}}
+.empty{text-align:center;padding:30px 10px;color:var(--mut)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-top:2px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:3px;vertical-align:-1px}
+a{color:var(--acc)}
+.nota{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:17px;flex:none}
+.ivs{margin-top:10px}
+.iv{display:grid;grid-template-columns:22px 1fr 76px;align-items:center;gap:8px;font-size:13px;padding:5px 0;border-top:1px solid var(--line)}
+.iv .bar{height:8px;border-radius:4px;background:var(--card2);position:relative;overflow:hidden}
+.iv .bar i{position:absolute;top:0;bottom:0;left:0;border-radius:4px}
+.lista{margin:10px 0 0;padding:0;list-style:none;font-size:13.5px}
+.lista li{padding:6px 0 6px 24px;position:relative;border-top:1px solid var(--line)}
+.lista li::before{position:absolute;left:0;top:6px}
+.lista.ok li::before{content:"👍"} .lista.mej li::before{content:"💡"}
+</style>
+</head>
+<body>
+<header><h1>🚴 Entrenos por vatios</h1><span class="pill" id="modo">—</span></header>
+<main id="vista"></main>
+<nav id="nav">
+  <button data-t="plan" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M6 16v-5M10 16V7M14 16v-3M18 16V9"/></svg>Plan</button>
+  <button data-t="informes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Informes</button>
+  <button data-t="lesiones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>Lesiones</button>
+  <button data-t="pruebas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Pruebas</button>
+  <button data-t="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Ajustes</button>
+</nav>
+
+<script>
+"use strict";
+/* ============ Estado y almacenamiento local ============ */
+const LS = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+let conn = LS.get("conn", { owner: "", repo: "entrenos-auto", token: "" });
+let cfg = null, cfgSha = null, plan = null, informes = [], tab = "plan", ultimaRun = null, sondeo = null;
+const demo = () => !conn.token;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function toast(msg, ms = 2600) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), ms);
+}
+
+/* ============ GitHub API ============ */
+const GH = "https://api.github.com";
+async function gh(path, opt = {}) {
+  const r = await fetch(GH + path, {
+    ...opt, cache: "no-store",
+    headers: { Authorization: "Bearer " + conn.token, Accept: "application/vnd.github+json",
+               "X-GitHub-Api-Version": "2022-11-28", ...(opt.body ? { "Content-Type": "application/json" } : {}) }
+  });
+  if (!r.ok) {
+    let m = r.status + ""; try { m += " · " + (await r.json()).message; } catch {}
+    throw new Error(m);
+  }
+  return r.status === 204 ? null : r.json();
+}
+const b64dec = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), c => c.charCodeAt(0)));
+const b64enc = s => { const b = new TextEncoder().encode(s); let x = ""; b.forEach(c => x += String.fromCharCode(c)); return btoa(x); };
+const repo = () => `/repos/${encodeURIComponent(conn.owner)}/${encodeURIComponent(conn.repo)}`;
+
+async function leerArchivo(nombre) {
+  const d = await gh(`${repo()}/contents/${nombre}?t=${Date.now()}`);
+  return { json: JSON.parse(b64dec(d.content)), sha: d.sha };
+}
+
+async function cargar() {
+  if (demo()) {
+    $("#modo").textContent = "demo";
+    [plan, cfg, informes] = await Promise.all(["demo_plan.json", "demo_config.json", "demo_informes.json"].map(f => fetch(f).then(r => r.json())));
+    pintar(); return;
+  }
+  $("#modo").textContent = conn.repo;
+  try {
+    const c = await leerArchivo("config.json"); cfg = c.json; cfgSha = c.sha;
+  } catch (e) { toast("No pude leer config.json: " + e.message, 4000); }
+  try { plan = (await leerArchivo("ultimo_plan.json")).json; } catch { plan = null; }
+  try { informes = (await leerArchivo("informes.json")).json; } catch { informes = []; }
+  try { await estadoRun(); } catch {}
+  pintar();
+}
+
+async function guardarConfig(msg) {
+  if (cfg.planificacion.dias.length !== 2) { toast("Elige exactamente 2 días en Ajustes"); return; }
+  if (demo()) { toast("Modo demo: conecta tu repositorio en Ajustes para guardar"); return; }
+  try {
+    const r = await gh(`${repo()}/contents/config.json`, { method: "PUT", body: JSON.stringify({
+      message: msg, content: b64enc(JSON.stringify(cfg, null, 2) + "\n"), sha: cfgSha }) });
+    cfgSha = r.content.sha; toast("✅ Guardado");
+  } catch (e) { toast("Error al guardar: " + e.message, 4000); }
+}
+
+async function lanzar(prueba) {
+  if (demo()) { toast("Modo demo: conecta tu repositorio en Ajustes"); return; }
+  if (!prueba && !confirm("¿Generar el plan y enviarlo a intervals.icu y Garmin?")) return;
+  try {
+    const info = await gh(repo());
+    await gh(`${repo()}/actions/workflows/semanal.yml/dispatches`, { method: "POST",
+      body: JSON.stringify({ ref: info.default_branch, inputs: { prueba: prueba ? "true" : "false" } }) });
+    toast(prueba ? "Calculando vista previa…" : "Generando y enviando…");
+    ultimaRun = { status: "queued" }; pintar();
+    setTimeout(sondear, 4000);
+  } catch (e) { toast("No se pudo lanzar: " + e.message, 4500); }
+}
+
+async function lanzarInforme() {
+  if (demo()) { toast("Modo demo: conecta tu repositorio en Ajustes"); return; }
+  try {
+    const info = await gh(repo());
+    await gh(`${repo()}/actions/workflows/informe.yml/dispatches`, { method: "POST", body: JSON.stringify({ ref: info.default_branch }) });
+    toast("Buscando entrenos nuevos… en 1-2 min pulsa de nuevo la pestaña");
+  } catch (e) { toast("No se pudo lanzar: " + e.message, 4500); }
+}
+
+async function estadoRun() {
+  const d = await gh(`${repo()}/actions/workflows/semanal.yml/runs?per_page=1`);
+  ultimaRun = d.workflow_runs[0] || null;
+  return ultimaRun;
+}
+
+async function sondear() {
+  clearTimeout(sondeo);
+  try {
+    const r = await estadoRun();
+    if (r && r.status !== "completed") { pintarRun(); sondeo = setTimeout(sondear, 5000); return; }
+    if (r && r.conclusion === "success") { toast("✅ Plan listo"); plan = (await leerArchivo("ultimo_plan.json")).json; }
+    else if (r) toast("⚠️ La ejecución falló. Mira el registro en GitHub.", 4500);
+  } catch (e) { toast(e.message); }
+  pintar();
+}
+
+/* ============ Utilidades de entreno ============ */
+const ZONAS = [[56, "--z1", "Z1"], [76, "--z2", "Z2"], [91, "--z3", "Z3"], [106, "--z4", "Z4"], [121, "--z5", "Z5"], [999, "--z6", "Z6+"]];
+const zona = p => ZONAS.find(z => p < z[0]);
+const DIAS = ["L", "M", "X", "J", "V", "S", "D"];
+const DIAS_L = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+
+function fechaBonita(iso) {
+  const d = new Date(iso + "T12:00:00");
+  return `${DIAS_L[d.getDay()]} ${d.getDate()}/${d.getMonth() + 1}`;
+}
+
+function aVatios(texto, ftp) {
+  return texto.replace(/(\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))?%/g, (_, a, b) => {
+    const w1 = Math.round(a * ftp / 100);
+    return b ? `${w1}–${Math.round(b * ftp / 100)} W` : `${w1} W`;
+  });
+}
+
+function svgPerfil(perfil) {
+  const W = 600, H = 92, total = perfil.reduce((s, x) => s + x[0], 0);
+  const max = Math.max(130, ...perfil.flatMap(x => [x[1], x[2]]));
+  const y = p => H - (p / max) * (H - 6);
+  let x = 0, out = "";
+  for (const [s, a, b] of perfil) {
+    const w = (s / total) * W, col = `var(${zona((a + b) / 2)[1]})`;
+    out += `<path d="M${x},${H} L${x},${y(a)} L${x + w},${y(b)} L${x + w},${H}Z" fill="${col}"/>`;
+    x += w;
+  }
+  const ftpY = y(100);
+  return `<svg class="prof" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${out}
+    <line x1="0" x2="${W}" y1="${ftpY}" y2="${ftpY}" stroke="#fff" stroke-opacity=".35" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+function tiempoEnZonas(perfil) {
+  const t = {};
+  for (const [s, a, b] of perfil) { const z = zona((a + b) / 2)[2]; t[z] = (t[z] || 0) + s; }
+  return ZONAS.filter(z => t[z[2]]).map(z => `<span><i style="background:var(${z[1]})"></i>${z[2]} ${Math.round(t[z[2]] / 60)}'</span>`).join("");
+}
+
+/* ============ Vistas ============ */
+function pintarRun() {
+  const el = $("#run"); if (!el) return;
+  if (demo() || !ultimaRun) { el.innerHTML = ""; return; }
+  const r = ultimaRun, cls = r.status !== "completed" ? "run" : r.conclusion === "success" ? "ok" : "bad";
+  const txt = r.status !== "completed" ? "Ejecutando en GitHub…" :
+    `Última ejecución: ${new Date(r.created_at).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" })} · ${r.conclusion === "success" ? "correcta" : "con error"}`;
+  el.innerHTML = `<span class="dot ${cls}"></span><span>${txt}</span>${r.html_url ? `<a class="sm" href="${r.html_url}" target="_blank" rel="noopener">registro</a>` : ""}`;
+}
+
+function vPlan() {
+  const ocupado = ultimaRun && ultimaRun.status && ultimaRun.status !== "completed";
+  let h = `<div class="btns">
+      <button class="b" onclick="lanzar(true)" ${ocupado ? "disabled" : ""}>👁 Vista previa</button>
+      <button class="b pri" onclick="lanzar(false)" ${ocupado ? "disabled" : ""}>⚡ Generar y enviar</button>
+    </div><div class="run" id="run"></div>`;
+  if (!plan) return h + `<div class="card empty">Aún no hay plan.<br>Pulsa <b>Vista previa</b> para calcular el de esta semana.</div>`;
+  const e = plan.estado, f = e.fatiga;
+  const fat = f === 2 ? ["b-bad", "Fatiga alta"] : f === 1 ? ["b-warn", "Algo cargado"] : ["b-ok", "Fresco"];
+  const n = (v, d = 0) => v == null ? "–" : (+v).toFixed(d);
+  const modo = { subido: "Enviado a Garmin", prueba: "Vista previa (no enviado)", demo: "Datos de ejemplo" }[plan.modo] || plan.modo;
+  h += `<div class="card">
+    <div class="row"><span class="mut sm">Semana ${plan.semana} · ${esc(plan.fase)}</span><span class="sp"></span><span class="badge ${fat[0]}">${fat[1]}</span></div>
+    ${plan.objetivo ? `<div class="big" style="margin-top:6px">${plan.objetivo.dias} días</div><div class="mut">para ${esc(plan.objetivo.nombre)}</div>` : `<div class="big">Sin objetivo próximo</div>`}
+    <div class="chips">
+      <div class="chip"><b>${n(e.ftp)} W</b><span>FTP</span></div>
+      <div class="chip"><b>${n(e.ctl)}</b><span>Fitness (CTL)</span></div>
+      <div class="chip"><b style="color:${e.tsb < -20 ? "var(--bad)" : e.tsb < -10 ? "var(--warn)" : "var(--ok)"}">${n(e.tsb)}</b><span>Forma (TSB)</span></div>
+      <div class="chip"><b>${n(e.hrv_7)}</b><span>HRV 7d (${n(e.hrv_28)})</span></div>
+      <div class="chip"><b>${n(e.fc_7)}</b><span>FC reposo</span></div>
+      <div class="chip"><b>${n(e.sueno_7, 1)} h</b><span>Sueño 7d</span></div>
+    </div>
+    ${plan.notas.map(x => `<div class="note">${esc(x)}</div>`).join("")}
+    <div class="mut sm" style="margin-top:10px">${esc(modo)} · ${new Date(plan.generado).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" })}</div>
+  </div><h2>Sesiones</h2>`;
+  if (!plan.sesiones.length) h += `<div class="card empty">Esta semana no se programan sesiones.</div>`;
+  for (const s of plan.sesiones) {
+    h += `<div class="card">
+      <div class="ses-date">${fechaBonita(s.fecha)} · 60 min</div>
+      <div class="ses-title">${esc(s.titulo)}</div>
+      <div class="mut sm">${esc(s.objetivo)}</div>
+      ${s.perfil ? svgPerfil(s.perfil) + `<div class="legend">${tiempoEnZonas(s.perfil)}</div>` : ""}
+      <details><summary>Ver pasos en vatios</summary><pre>${esc(aVatios(s.texto, e.ftp))}</pre></details>
+    </div>`;
+  }
+  return h;
+}
+
+function vInformes() {
+  let h = `<div class="btns" style="grid-template-columns:1fr 1fr"><button class="b" onclick="cargar()">↻ Actualizar</button><button class="b pri" onclick="lanzarInforme()">🔍 Analizar ya</button></div>
+    <p class="mut sm" style="margin:-2px 4px 12px">Se analiza solo cada hora (de 7 a 23 h) cuando subes un entreno de bici.</p>`;
+  if (!informes.length) return h + `<div class="card empty">Aún no hay informes.<br>Aparecerán tras tu próximo entreno.</div>`;
+  const n = (v, d = 0) => v == null ? null : (+v).toFixed(d);
+  for (const f of informes) {
+    const col = f.nota == null ? "var(--mut)" : f.nota >= 85 ? "var(--ok)" : f.nota >= 60 ? "var(--warn)" : "var(--bad)";
+    const chips = [["Duración", f.duracion_min + "'"], ["TSS", n(f.tss)], ["NP", n(f.np) && n(f.np) + " W"], ["IF", n(f.if, 2)],
+                   ["FC media", n(f.fc_media)], ["Deriva", f.decoupling != null ? f.decoupling + " %" : null]].filter(c => c[1]);
+    h += `<div class="card">
+      <div class="row">
+        <div class="sp"><div class="ses-date">${f.fecha ? fechaBonita(f.fecha) : ""}</div>
+          <div class="ses-title">${esc(f.nombre)}</div>
+          <div class="mut sm">${f.planificado ? "Plan: " + esc(f.planificado) : "Sin sesión planificada"}</div></div>
+        ${f.nota != null ? `<div class="nota" style="border:3px solid ${col};color:${col}">${f.nota}</div>` : ""}
+      </div>
+      <div style="margin-top:8px;font-weight:700">${esc(f.veredicto)}</div>
+      <div class="chips">${chips.map(c => `<div class="chip"><b>${esc(c[1])}</b><span>${c[0]}</span></div>`).join("")}</div>`;
+    if (f.intervalos && f.intervalos.length) {
+      const ref = Math.max(...f.intervalos.map(i => parseInt(i.obj.split(/[–\s]/)[0]) || 1)) * 1.25;
+      const colEst = { ok: "var(--ok)", alto: "var(--z5)", bajo: "var(--warn)", "no hecho": "var(--bad)" };
+      h += `<div class="ivs"><div class="mut sm">Bloques de trabajo (objetivo → real)</div>` + f.intervalos.map(i => {
+        const w = parseInt(i.real) || 0;
+        return `<div class="iv"><b>${i.n}</b>
+          <div><div class="bar"><i style="width:${Math.min(100, w / ref * 100)}%;background:${colEst[i.estado]}"></i></div>
+          <div class="mut" style="font-size:11.5px;margin-top:2px">obj. ${esc(i.obj)}${i.fc ? ` · ${i.fc} ppm` : ""}</div></div>
+          <div style="text-align:right;font-weight:700;color:${colEst[i.estado]}">${esc(i.real || "—")}</div></div>`;
+      }).join("") + `</div>`;
+    }
+    if (f.logros && f.logros.length) h += `<ul class="lista ok">${f.logros.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    if (f.mejoras && f.mejoras.length) h += `<ul class="lista mej">${f.mejoras.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    h += `</div>`;
+  }
+  return h;
+}
+
+const ZONAS_LES = ["rodilla", "lumbar", "cadera", "tobillo", "general"];
+function vLesiones() {
+  const ls = cfg.lesiones = cfg.lesiones || [];
+  let h = `<p class="mut sm" style="margin:2px 4px 12px">Leve: evita las sesiones que cargan esa zona · Moderada: solo Z2/tempo · Grave: no se programa nada.</p>`;
+  if (!ls.length) h += `<div class="card empty">Sin lesiones registradas 💪</div>`;
+  ls.forEach((l, i) => {
+    h += `<div class="card">
+      <div class="row">
+        <select style="flex:1" onchange="cfg.lesiones[${i}].zona=this.value">${ZONAS_LES.map(z => `<option ${z === l.zona ? "selected" : ""}>${z}</option>`).join("")}</select>
+        <label class="sw" title="Activa"><input type="checkbox" ${l.activa ? "checked" : ""} onchange="cfg.lesiones[${i}].activa=this.checked"><i></i></label>
+        <button class="del" onclick="cfg.lesiones.splice(${i},1);pintar()">✕</button>
+      </div>
+      <label>Gravedad</label>
+      <div class="seg">${["leve", "moderada", "grave"].map(g => `<button class="${g} ${g === l.gravedad ? "on" : ""}" onclick="cfg.lesiones[${i}].gravedad='${g}';pintar()">${g}</button>`).join("")}</div>
+      <label>Nota</label><input value="${esc(l.nota)}" oninput="cfg.lesiones[${i}].nota=this.value" placeholder="p. ej. molestia al subir de pie">
+    </div>`;
+  });
+  h += `<button class="lnk" onclick="cfg.lesiones.push({zona:'rodilla',gravedad:'leve',activa:true,nota:''});pintar()">+ Añadir lesión</button>
+    <div class="btns" style="grid-template-columns:1fr"><button class="b pri" onclick="guardarConfig('Lesiones actualizadas desde la app')">Guardar</button></div>`;
+  return h;
+}
+
+function vPruebas() {
+  const os = cfg.objetivos = cfg.objetivos || [];
+  os.sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const hoy = new Date().toISOString().slice(0, 10);
+  let h = `<p class="mut sm" style="margin:2px 4px 12px">También se leen las carreras RACE A/B/C que tengas en el calendario de intervals.icu.</p>`;
+  os.forEach((o, i) => {
+    const dias = Math.round((new Date(o.fecha) - new Date(hoy)) / 864e5);
+    h += `<div class="card">
+      <div class="row"><input style="flex:1;font-weight:700" value="${esc(o.nombre)}" oninput="cfg.objetivos[${i}].nombre=this.value"><button class="del" onclick="cfg.objetivos.splice(${i},1);pintar()">✕</button></div>
+      <div class="grid2">
+        <div><label>Fecha ${dias >= 0 ? `· faltan ${dias} d` : "· pasada"}</label><input type="date" value="${esc(o.fecha)}" onchange="cfg.objetivos[${i}].fecha=this.value;pintar()"></div>
+        <div><label>Tipo</label><select onchange="cfg.objetivos[${i}].tipo=this.value">${["gravel", "mtb", "carretera"].map(t => `<option ${t === o.tipo ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      </div>
+      <label>Prioridad</label>
+      <div class="seg">${["A", "B", "C"].map(p => `<button class="${p === o.prioridad ? "on moderada" : ""}" onclick="cfg.objetivos[${i}].prioridad='${p}';pintar()">${p}</button>`).join("")}</div>
+    </div>`;
+  });
+  h += `<button class="lnk" onclick="cfg.objetivos.push({nombre:'Nueva prueba',fecha:'${hoy}',tipo:'gravel',prioridad:'B'});pintar()">+ Añadir prueba</button>
+    <div class="btns" style="grid-template-columns:1fr"><button class="b pri" onclick="guardarConfig('Pruebas actualizadas desde la app')">Guardar</button></div>`;
+  return h;
+}
+
+function vAjustes() {
+  const p = cfg.planificacion, a = cfg.atleta;
+  return `<h2>Entrenamiento</h2><div class="card">
+      <label>Días de las 2 sesiones</label>
+      <div class="days">${DIAS.map((d, i) => `<button class="${p.dias.includes(i) ? "on" : ""}" onclick="toggleDia(${i})">${d}</button>`).join("")}</div>
+      <div class="grid2">
+        <div><label>Hora</label><input type="time" value="${esc(p.hora)}" onchange="cfg.planificacion.hora=this.value"></div>
+        <div><label>FTP de reserva (W)</label><input type="number" inputmode="numeric" value="${a.ftp_reserva}" onchange="cfg.atleta.ftp_reserva=+this.value"></div>
+      </div>
+      <label>Inicio de la preparación (bloques 3+1)</label><input type="date" value="${esc(a.inicio_preparacion)}" onchange="cfg.atleta.inicio_preparacion=this.value">
+      <div class="btns" style="grid-template-columns:1fr;margin-top:14px"><button class="b pri" onclick="guardarConfig('Ajustes actualizados desde la app')">Guardar</button></div>
+    </div>
+    <h2>Conexión con GitHub</h2><div class="card">
+      <label>Usuario de GitHub</label><input id="c-owner" value="${esc(conn.owner)}" autocapitalize="off" autocomplete="off">
+      <label>Repositorio privado del planificador</label><input id="c-repo" value="${esc(conn.repo)}" autocapitalize="off">
+      <label>Token (fine-grained)</label><input id="c-token" type="password" value="${esc(conn.token)}" placeholder="github_pat_…" autocomplete="off">
+      <p class="mut sm">Se guarda solo en este móvil. Permisos: <b>Contents</b> y <b>Actions</b> en lectura y escritura, únicamente para ese repositorio.</p>
+      <div class="btns"><button class="b" onclick="desconectar()">Modo demo</button><button class="b pri" onclick="conectar()">Conectar</button></div>
+    </div>
+    <p class="mut sm" style="text-align:center">Herramienta orientativa: con dolor que va a más, para y consulta.</p>`;
+}
+
+function toggleDia(i) {
+  let d = cfg.planificacion.dias;
+  if (d.includes(i)) d = d.filter(x => x !== i);
+  else { d = [...d, i]; if (d.length > 2) d.shift(); }
+  cfg.planificacion.dias = d.sort((a, b) => a - b);
+  if (d.length !== 2) toast("Elige exactamente 2 días");
+  pintar();
+}
+
+async function conectar() {
+  conn = { owner: $("#c-owner").value.trim(), repo: $("#c-repo").value.trim(), token: $("#c-token").value.trim() };
+  if (!conn.owner || !conn.repo || !conn.token) { toast("Rellena los tres campos"); return; }
+  try { await gh(repo()); LS.set("conn", conn); toast("✅ Conectado"); tab = "plan"; marcarNav(); await cargar(); }
+  catch (e) { toast("No conecta: " + e.message, 4500); }
+}
+function desconectar() { conn = { ...conn, token: "" }; LS.set("conn", conn); cargar(); }
+
+function pintar() {
+  if (!cfg) { $("#vista").innerHTML = `<div class="card empty">Cargando…</div>`; return; }
+  $("#vista").innerHTML = ({ plan: vPlan, informes: vInformes, lesiones: vLesiones, pruebas: vPruebas, ajustes: vAjustes })[tab]();
+  pintarRun();
+  if (demo() && tab === "plan") $("#vista").insertAdjacentHTML("afterbegin",
+    `<div class="note" style="margin:0 0 12px">Modo demo con datos de ejemplo. Conecta tu repositorio en <b>Ajustes</b>.</div>`);
+}
+function marcarNav() { document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.t === tab)); }
+$("#nav").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  tab = b.dataset.t; marcarNav(); pintar(); window.scrollTo(0, 0);
+});
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+cargar();
+</script>
+</body>
+</html>
