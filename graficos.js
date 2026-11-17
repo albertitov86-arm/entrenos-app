@@ -16,7 +16,7 @@ const anchoGraf = () => Math.max(260, Math.min(640, window.innerWidth) - 28 - 30
 let grafId = 0;
 
 /* ---------- Gráfico de líneas con cruz y tooltip (sincronizable) ---------- */
-function gLineas({ series, x, alto = 150, yMin, yMax, bandas = [], refs = [], grupo = null, fx = v => v, fy = v => v, unidad = "", relleno = false }) {
+function gLineas({ series, x, alto = 150, yMin, yMax, bandas = [], refs = [], marcas = [], grupo = null, fx = v => v, fy = v => v, unidad = "", relleno = false }) {
   const id = "g" + (++grafId), W = anchoGraf(), H = alto, PL = 34, PR = 8, PT = 8, PB = 20;
   const vals = series.flatMap(s => s.v).filter(v => v != null);
   if (!vals.length) return `<div class="empty sm">Sin datos todavía</div>`;
@@ -36,13 +36,18 @@ function gLineas({ series, x, alto = 150, yMin, yMax, bandas = [], refs = [], gr
     s += `<line x1="${PL}" x2="${W - PR}" y1="${y}" y2="${y}" stroke="${COL.grid}" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
     s += `<text x="${PL - 5}" y="${y + 3.5}" text-anchor="end" class="gt">${fy(Math.round(v))}</text>`;
   }
-  const marcas = Math.min(5, n);
-  for (let k = 0; k < marcas; k++) {
-    const i = Math.round(k * (n - 1) / Math.max(1, marcas - 1));
-    s += `<text x="${X(i)}" y="${H - 5}" text-anchor="${k === 0 ? "start" : k === marcas - 1 ? "end" : "middle"}" class="gt">${fx(x[i])}</text>`;
+  const nTicks = Math.min(5, n);
+  for (let k = 0; k < nTicks; k++) {
+    const i = Math.round(k * (n - 1) / Math.max(1, nTicks - 1));
+    s += `<text x="${X(i)}" y="${H - 5}" text-anchor="${k === 0 ? "start" : k === nTicks - 1 ? "end" : "middle"}" class="gt">${fx(x[i])}</text>`;
   }
   for (const r of refs) s += `<line x1="${PL}" x2="${W - PR}" y1="${Y(r.y)}" y2="${Y(r.y)}" stroke="#fff" stroke-opacity=".45" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>` +
     `<text x="${PL + 4}" y="${Y(r.y) - 4}" class="gt">${r.label}</text>`;
+  for (const mk of marcas) {
+    const i = x.indexOf(mk.x); if (i < 0) continue;
+    s += `<line x1="${X(i)}" x2="${X(i)}" y1="${PT}" y2="${H - PB}" stroke="${mk.color || "#fff"}" stroke-opacity="${mk.color ? 1 : .5}" stroke-width="1.5" ${mk.discontinua ? 'stroke-dasharray="3 3"' : ""} vector-effect="non-scaling-stroke"/>` +
+      `<text x="${X(i) - 4}" y="${mk.abajo ? H - PB - 5 : PT + 10}" text-anchor="end" class="gt" style="fill:#e8ebf0">${mk.label}</text>`;
+  }
   for (const se of series) {
     let d = "", abierto = false;
     se.v.forEach((v, i) => { if (v == null) { abierto = false; return; } d += `${abierto ? "L" : "M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`; abierto = true; });
@@ -153,6 +158,27 @@ function vPanel() {
 
   if (p.objetivos?.length) o += `<div class="cuenta">${p.objetivos.slice(0, 3).map(ob => `<div class="card cd"><b>${ob.dias}</b><span>días</span><div class="sm">${esc(ob.nombre)}</div><div class="mut sm">${ob.tipo} · ${fCorta(ob.fecha)}</div></div>`).join("")}</div>`;
 
+  if (p.adaptacion?.length) o += `<div class="card">${p.adaptacion.map(t => `<div class="row" style="gap:8px;margin:3px 0">${chipEstado("good", "Plan")}<span class="sm">${esc(t)}</span></div>`).join("")}</div>`;
+
+  if (p.proyeccion?.serie?.length) {
+    const pr = p.proyeccion, hist = p.serie.slice(-42), xs2 = [...hist.map(s => s.d), ...pr.serie.map(s => s.d)];
+    const nH = hist.length, nP = pr.serie.length, fx2 = (d, largo) => largo ? fCorta(d) : fCorta(d).replace(" ", "/");
+    const marcas = [{ x: p.generado_dia, label: "hoy", discontinua: true }, ...pr.veredictos.map(v => ({ x: v.fecha, label: nombreCorto(v.nombre), color: COL.s2, abajo: true }))];
+    o += `<h2>Camino a tus pruebas</h2>${pr.veredictos.map(v => `<div class="card">
+        <div class="row"><b class="sp">${esc(v.nombre)}</b>${chipEstado(v.estado, v.estado === "good" ? "En buen camino" : "Revisar")}</div>
+        <div class="chips c3"><div class="chip"><b>${v.ctl}</b><span>Fitness previsto</span></div><div class="chip"><b>${v.tsb > 0 ? "+" : ""}${v.tsb}</b><span>Forma el día</span></div><div class="chip"><b>${fCorta(v.fecha)}</b><span>${v.tipo}</span></div></div>
+        <p class="ayuda">${esc(v.texto)}</p></div>`).join("")}
+      <div class="card"><div class="sub">Fitness: real y previsto si cumples el plan</div>
+      ${gLineas({ series: [{ nombre: "Fitness real", color: COL.s1, v: [...hist.map(s => s.ctl), ...Array(nP).fill(null)] },
+                           { nombre: "Fitness previsto", color: COL.s1, discontinua: true, v: [...Array(nH - 1).fill(null), hist[nH - 1]?.ctl ?? null, ...pr.serie.map(s => s.ctl)] }],
+          x: xs2, fx: fx2, alto: 150, marcas, grupo: "proy" })}
+      <div class="sub">Forma prevista (TSB)</div>
+      ${gLineas({ series: [{ nombre: "Forma", color: COL.s3, v: [...hist.map(s => s.tsb), ...pr.serie.map(s => s.tsb)] }], x: xs2, fx: fx2, alto: 120, marcas, grupo: "proy",
+          bandas: [{ desde: 5, hasta: 25, label: "ideal para competir", color: "rgba(57,135,229,.10)" }, { desde: -99, hasta: -30, label: "riesgo", color: "rgba(208,59,59,.10)" }] })}
+      ${pr.aviso ? `<p class="ayuda">${chipEstado("warning", "Ojo")} ${esc(pr.aviso)}</p>` : ""}
+      <p class="ayuda">Supone que haces las sesiones planificadas y tu carga habitual el resto de días. Se recalcula cada hora.</p></div>`;
+  }
+
   const ult = p.ftp_hist?.length ? p.ftp_hist[p.ftp_hist.length - 1].eftp : null;
   const wkg = p.peso ? (p.ftp / p.peso).toFixed(2) : null;
   o += `<div class="chips c4">
@@ -204,6 +230,7 @@ function vPanel() {
 /* =====================================================================
    VISTA INFORMES: lista + detalle
    ===================================================================== */
+const nombreCorto = n => (n.split(/\s+/).find(w => w.length > 2 && !/^(gran|fondo|marcha|carrera|ruta|desafío|the|la|el|los|las)$/i.test(w)) || n).slice(0, 12);
 let informeAbierto = null;
 function vInformes() {
   if (informeAbierto != null && informes[informeAbierto]) return vInformeDetalle(informes[informeAbierto]);
@@ -269,6 +296,9 @@ function vInformeDetalle(f) {
         <div class="row sm"><span><b>${real ? real + " W" : "—"}</b></span>${i.fc ? `<span class="mut">${i.fc} ppm</span>` : ""}${i.cad ? `<span class="mut">${Math.round(i.cad)} rpm</span>` : ""}</div></div>`;
     }).join("")}<p class="ayuda">La franja gris es el objetivo; la barra, lo que hiciste.</p></div>`;
   }
+
+  if (f.mantenimiento != null) { const r = f.mantenimiento, e = r >= 95 ? "good" : r >= 88 ? "warning" : "critical";
+    o += `<h2>Aguante en la 2ª mitad</h2><div class="card"><div class="row"><div class="big">${r} %</div><div class="sp mut sm">de la potencia de la 1ª mitad que mantuviste en la 2ª</div>${chipEstado(e, r >= 95 ? "Muy bien" : r >= 88 ? "Aceptable" : "Bajón")}</div></div>`; }
 
   if (f.zonas && Object.keys(f.zonas).length) o += `<h2>Tiempo en zonas</h2><div class="card">${gZonas(f.zonas)}</div>`;
 

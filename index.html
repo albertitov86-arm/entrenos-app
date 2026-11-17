@@ -94,7 +94,7 @@ a{color:var(--acc)}
 .leyenda{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:0 0 6px}
 .sub{font-size:12.5px;font-weight:600;margin:12px 0 2px}.sub:first-child{margin-top:0}
 .ayuda{font-size:12.5px;color:var(--mut);margin:8px 0 0}
-.chips.c4{grid-template-columns:repeat(4,1fr);margin:0 0 12px}.chips.c4 .chip b{font-size:16px}
+.chips.c3{grid-template-columns:repeat(3,1fr);margin:10px 0 0}.chips.c4{grid-template-columns:repeat(4,1fr);margin:0 0 12px}.chips.c4 .chip b{font-size:16px}
 .anillo{position:relative;display:inline-flex;flex-direction:column;align-items:center;flex:none}
 .ring{position:relative}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-weight:800}
 .anillo span{font-size:11px;color:var(--mut);margin-top:3px;text-align:center;line-height:1.2}
@@ -322,7 +322,7 @@ function vPlan() {
   if (!plan.sesiones.length) h += `<div class="card empty">Esta semana no se programan sesiones.</div>`;
   for (const s of plan.sesiones) {
     h += `<div class="card">
-      <div class="ses-date">${fechaBonita(s.fecha)} · 60 min</div>
+      <div class="ses-date">${fechaBonita(s.fecha)} · ${hms(s.duracion_s || 3600)}${s.tss ? ` · ≈ ${s.tss} TSS` : ""}</div>
       <div class="ses-title">${esc(s.titulo)}</div>
       <div class="mut sm">${esc(s.objetivo)}</div>
       ${s.perfil ? svgPerfil(s.perfil) + `<div class="legend">${tiempoEnZonas(s.perfil)}</div>` : ""}
@@ -376,6 +376,8 @@ function vPruebas() {
   return h;
 }
 
+const larga = () => ({ activa: true, dia: 6, hora: "09:00", ...(cfg.larga || {}) });
+
 function vObjetivos() {
   return `<h2 style="margin-top:4px">Pruebas</h2>` + vPruebas() + `<h2>Lesiones y molestias</h2>` + vLesiones();
 }
@@ -389,6 +391,11 @@ function vAjustes() {
         <div><label>Hora</label><input type="time" value="${esc(p.hora)}" onchange="cfg.planificacion.hora=this.value"></div>
         <div><label>FTP de reserva (W)</label><input type="number" inputmode="numeric" value="${a.ftp_reserva}" onchange="cfg.atleta.ftp_reserva=+this.value"></div>
       </div>
+      <div class="row" style="margin-top:14px"><div class="sp"><b>Salida larga planificada</b><div class="mut sm">Duración y bloques según tus pruebas</div></div>
+        <label class="sw"><input type="checkbox" ${larga().activa ? "checked" : ""} onchange="cfg.larga={...larga(),activa:this.checked};pintar()"><i></i></label></div>
+      ${larga().activa ? `<div class="grid2">
+        <div><label>Día</label><select onchange="cfg.larga={...larga(),dia:+this.value}">${DIAS.map((d, i) => `<option value="${i}" ${i === larga().dia ? "selected" : ""}>${["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"][i]}</option>`).join("")}</select></div>
+        <div><label>Hora</label><input type="time" value="${esc(larga().hora)}" onchange="cfg.larga={...larga(),hora:this.value}"></div></div>` : ""}
       <label>Inicio de la preparación (bloques 3+1)</label><input type="date" value="${esc(a.inicio_preparacion)}" onchange="cfg.atleta.inicio_preparacion=this.value">
       <div class="btns" style="grid-template-columns:1fr;margin-top:14px"><button class="b pri" onclick="guardarConfig('Ajustes actualizados desde la app')">Guardar</button></div>
     </div>

@@ -1,12 +1,12 @@
 {
-  "generado": "2026-11-13T02:45",
+  "generado": "2026-11-17T16:34",
   "modo": "demo",
-  "fase": "Específico",
-  "semana": 10,
+  "fase": "Base",
+  "semana": 2,
   "objetivo": {
     "nombre": "Gran Fondo Jaén Paraíso Interior",
     "fecha": "2027-02-13",
-    "dias": 32
+    "dias": 88
   },
   "estado": {
     "ftp": 214,
@@ -25,10 +25,10 @@
   "notas": [],
   "sesiones": [
     {
-      "clave": "vo2",
-      "titulo": "VO2max N2",
-      "objetivo": "Techo aeróbico para repechos y cambios de ritmo",
-      "texto": "Calentamiento\n- 7m ramp 45-70%\n- activación 1m 90%\n- 2m 55%\n\nBloque principal\n\n6x\n- 3m 110-115%\n- 3m 55%\n\n- 6m 65%\n\nVuelta a la calma\n- 8m ramp 60-45%",
+      "clave": "sweetspot",
+      "titulo": "Sweet Spot N2",
+      "objetivo": "Subir el FTP con fatiga controlada",
+      "texto": "Calentamiento\n- 7m ramp 45-70%\n- activación 1m 90%\n- 2m 55%\n\nBloque principal\n\n2x\n- 15m 88-93%\n- 6m 55%\n\nVuelta a la calma\n- 8m ramp 60-45%",
       "perfil": [
         [
           420,
@@ -46,69 +46,24 @@
           55.0
         ],
         [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
-        ],
-        [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
-        ],
-        [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
-        ],
-        [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
-        ],
-        [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
-        ],
-        [
-          180,
-          112.5,
-          112.5
-        ],
-        [
-          180,
-          55.0,
-          55.0
+          900,
+          90.5,
+          90.5
         ],
         [
           360,
-          65.0,
-          65.0
+          55.0,
+          55.0
+        ],
+        [
+          900,
+          90.5,
+          90.5
+        ],
+        [
+          360,
+          55.0,
+          55.0
         ],
         [
           480,
@@ -116,13 +71,33 @@
           45.0
         ]
       ],
-      "fecha": "2027-01-12"
+      "trabajo": [
+        {
+          "s": 900,
+          "lo": 88.0,
+          "hi": 93.0,
+          "rpm": null
+        },
+        {
+          "s": 900,
+          "lo": 88.0,
+          "hi": 93.0,
+          "rpm": null
+        }
+      ],
+      "rango_base": [
+        88.0,
+        93.0
+      ],
+      "duracion_s": 3600,
+      "tss": 57,
+      "fecha": "2026-11-17"
     },
     {
-      "clave": "overunder",
-      "titulo": "Over-unders N2",
-      "objetivo": "Simula tramos de sterrato: cambios de ritmo sobre el umbral",
-      "texto": "Calentamiento\n- 7m ramp 45-70%\n- activación 1m 90%\n- 2m 55%\n\nBloque principal\n\n3x\n- por debajo 2m 90%\n- por encima 1m 108%\n- por debajo 2m 90%\n- por encima 1m 108%\n- por debajo 2m 90%\n- por encima 1m 108%\n- 4m 55%\n\n- 3m 65%\n\nVuelta a la calma\n- 8m ramp 60-45%",
+      "clave": "tempo",
+      "titulo": "Tempo 3x11'",
+      "objetivo": "Resistencia muscular a ritmo sostenido",
+      "texto": "Calentamiento\n- 7m ramp 45-70%\n- activación 1m 90%\n- 2m 55%\n\nBloque principal\n\n3x\n- 11m 80-85%\n- 3m 60%\n\nVuelta a la calma\n- 8m ramp 60-45%",
       "perfil": [
         [
           420,
@@ -140,114 +115,34 @@
           55.0
         ],
         [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          240,
-          55.0,
-          55.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          240,
-          55.0,
-          55.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          120,
-          90.0,
-          90.0
-        ],
-        [
-          60,
-          108.0,
-          108.0
-        ],
-        [
-          240,
-          55.0,
-          55.0
+          660,
+          82.5,
+          82.5
         ],
         [
           180,
-          65.0,
-          65.0
+          60.0,
+          60.0
+        ],
+        [
+          660,
+          82.5,
+          82.5
+        ],
+        [
+          180,
+          60.0,
+          60.0
+        ],
+        [
+          660,
+          82.5,
+          82.5
+        ],
+        [
+          180,
+          60.0,
+          60.0
         ],
         [
           480,
@@ -255,7 +150,114 @@
           45.0
         ]
       ],
-      "fecha": "2027-01-14"
+      "trabajo": [
+        {
+          "s": 660,
+          "lo": 80.0,
+          "hi": 85.0,
+          "rpm": null
+        },
+        {
+          "s": 660,
+          "lo": 80.0,
+          "hi": 85.0,
+          "rpm": null
+        },
+        {
+          "s": 660,
+          "lo": 80.0,
+          "hi": 85.0,
+          "rpm": null
+        }
+      ],
+      "rango_base": [
+        80.0,
+        85.0
+      ],
+      "duracion_s": 3600,
+      "tss": 53,
+      "fecha": "2026-11-19"
+    },
+    {
+      "clave": "larga",
+      "titulo": "Salida larga 3h15 con sweet spot",
+      "larga": true,
+      "objetivo": "Aguantar ritmo alto durante horas. Come 60-80 g de hidratos/h desde el minuto 30 y bebe 500-750 ml/h",
+      "texto": "Calentamiento\n- 15m ramp 50-68%\n\nBloque principal\n- resistencia 35m 65-75%\n- 12m 86-92%\n- 33m 65-75%\n- 12m 86-92%\n- 33m 65-75%\n- 12m 86-92%\n- 33m 65-75%\n\nVuelta a la calma\n- 10m ramp 65-50%",
+      "perfil": [
+        [
+          900,
+          50.0,
+          68.0
+        ],
+        [
+          2100,
+          70.0,
+          70.0
+        ],
+        [
+          720,
+          89.0,
+          89.0
+        ],
+        [
+          1980,
+          70.0,
+          70.0
+        ],
+        [
+          720,
+          89.0,
+          89.0
+        ],
+        [
+          1980,
+          70.0,
+          70.0
+        ],
+        [
+          720,
+          89.0,
+          89.0
+        ],
+        [
+          1980,
+          70.0,
+          70.0
+        ],
+        [
+          600,
+          65.0,
+          50.0
+        ]
+      ],
+      "trabajo": [
+        {
+          "s": 720,
+          "lo": 86.0,
+          "hi": 92.0,
+          "rpm": null
+        },
+        {
+          "s": 720,
+          "lo": 86.0,
+          "hi": 92.0,
+          "rpm": null
+        },
+        {
+          "s": 720,
+          "lo": 86.0,
+          "hi": 92.0,
+          "rpm": null
+        }
+      ],
+      "rango_base": [
+        65,
+        75
+      ],
+      "duracion_s": 11700,
+      "tss": 171,
+      "fecha": "2026-11-22"
     }
   ]
 }
