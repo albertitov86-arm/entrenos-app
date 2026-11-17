@@ -148,7 +148,7 @@ textarea{width:100%;min-height:110px;background:var(--card2);color:var(--tx);bor
   <button data-t="objetivos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Objetivos</button>
   <button data-t="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button>
 </nav>
-<script src="graficos.js"></script>
+<script src="graficos.js?v=6"></script>
 
 <script>
 "use strict";
@@ -460,7 +460,22 @@ async function conectar() {
 }
 function desconectar() { conn = { ...conn, token: "" }; LS.set("conn", conn); cargar(); }
 
+async function reparar() {
+  try { for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister(); } catch {}
+  try { for (const k of await caches.keys()) await caches.delete(k); } catch {}
+  location.replace(location.pathname + "?r=" + Date.now());
+}
+
 function pintar() {
+  try { pintarSeguro(); } catch (e) {
+    $("#vista").innerHTML = `<div class="card"><b>⚠️ La app no pudo mostrarse</b>
+      <p class="mut sm">Suele ser una versión antigua guardada en el móvil. Pulsa el botón para limpiarla y recargar.</p>
+      <div class="btns" style="grid-template-columns:1fr"><button class="b pri" onclick="reparar()">🔧 Reparar y recargar</button></div>
+      <pre>${esc(e && e.message || e)}</pre></div>`;
+  }
+}
+
+function pintarSeguro() {
   if (!cfg) { $("#vista").innerHTML = `<div class="card empty">Cargando…</div>`; return; }
   for (const k in GRAF) delete GRAF[k];
   $("#vista").innerHTML = ({ panel: vPanel, plan: vPlan, informes: vInformes, consulta: vConsulta, objetivos: vObjetivos, ajustes: vAjustes })[tab]();
