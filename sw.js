@@ -1,5 +1,5 @@
 // Service worker: la app abre sin conexión; los datos (GitHub) siempre van a la red.
-const CACHE = "entrenos-v4";
+const CACHE = "entrenos-v5";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png",
                "graficos.js", "demo_plan.json", "demo_config.json", "demo_informes.json", "demo_panel.json"];
 

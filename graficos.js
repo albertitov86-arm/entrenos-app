@@ -148,11 +148,21 @@ function vPanel() {
   const p = panel;
   if (!p) return `<div class="card empty">El panel aparecerá tras la próxima ejecución automática (cada hora de 7 a 23 h).<br><br>
     <button class="b pri" onclick="lanzarInforme()">Actualizar ahora</button></div>`;
-  const d = p.disposicion, h = p.hoy;
-  let o = `<div class="card hero">
-    <div class="row" style="gap:14px">${anillo(d.puntos, "hoy", d.estado, 92)}
-      <div class="sp"><div class="mut sm">Disposición para entrenar</div><div class="big">${esc(d.texto)}</div>
-      <div class="mut sm">${fCorta(p.generado_dia)} · orientativo</div></div></div>
+  const d = p.disposicion, h = p.hoy, eh = d.entreno_hoy;
+  const hora = runInforme ? new Date(runInforme.updated_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : null;
+  const diaRun = runInforme ? new Date(runInforme.updated_at).toISOString().slice(0, 10) : null;
+  const cuando = demo() ? `Datos de ejemplo · ${fCorta(p.generado_dia)}`
+    : hora ? `Actualizado ${diaRun === new Date().toISOString().slice(0, 10) ? "hoy" : fCorta(diaRun)} a las ${hora}` : `Datos del ${fCorta(p.generado_dia)}`;
+  let o = `<div class="actbar"><span class="dot ${actualizando ? "run" : "ok"}"></span><span>${actualizando ? "Actualizando… (≈ 1 min)" : cuando}</span>
+    <button onclick="lanzarInforme()" ${actualizando ? "disabled" : ""}>↻ ${actualizando ? "Espera" : "Actualizar ahora"}</button></div>`;
+  o += `<div class="card hero">
+    <div class="row" style="gap:14px">${anillo(d.puntos, eh ? "esta mañana" : "hoy", eh ? "good" : d.estado, 92)}
+      <div class="sp"><div class="mut sm">${eh ? "Disposición con la que empezaste el día" : "Disposición para entrenar"}</div><div class="big">${esc(d.texto)}</div>
+      <div class="mut sm">Según sueño, HRV, pulso y forma · orientativo</div></div></div>
+    ${eh ? `<div class="hecho"><span style="font-size:22px">✅</span><div class="sp"><b>Hoy: ${esc(eh.nombre)}</b>${eh.n > 1 ? ` (+${eh.n - 1})` : ""}
+        <div class="mut sm">${hms(eh.min * 60)} · ${eh.tss} TSS${eh.nota != null ? ` · nota ${eh.nota}/100` : ""}</div></div>
+        ${eh.nota != null ? `<button class="lnk" onclick="tab='informes';marcarNav();abrirInforme(Math.max(0, informes.findIndex(i => String(i.id) === String('${eh.id}'))))">Ver informe ›</button>` : ""}</div>
+      ${d.manana ? `<div class="manana"><b style="color:var(--tx)">Mañana:</b> forma ≈ ${d.manana.tsb > 0 ? "+" : ""}${d.manana.tsb}. ${esc(d.manana.texto)}</div>` : ""}` : ""}
     <div class="factores">${d.factores.map(f => `<div class="fac">${chipEstado(f.estado, esc(f.nombre))}<b>${esc(f.valor)}</b><span class="mut">${esc(f.texto)}</span></div>`).join("")}</div>
   </div>`;
 
@@ -234,7 +244,7 @@ const nombreCorto = n => (n.split(/\s+/).find(w => w.length > 2 && !/^(gran|fond
 let informeAbierto = null;
 function vInformes() {
   if (informeAbierto != null && informes[informeAbierto]) return vInformeDetalle(informes[informeAbierto]);
-  let h = `<div class="btns"><button class="b" onclick="cargar()">↻ Actualizar</button><button class="b pri" onclick="lanzarInforme()">🔍 Analizar ya</button></div>
+  let h = `<div class="btns"><button class="b" onclick="cargar()">↻ Recargar</button><button class="b pri" onclick="lanzarInforme()" ${actualizando ? "disabled" : ""}>${actualizando ? "⏳ Analizando…" : "🔍 Analizar ya"}</button></div>
     <p class="mut sm" style="margin:-2px 4px 12px">Se analizan solos cada hora (7-23 h) al subir un entreno de bici.</p>`;
   if (!informes.length) return h + `<div class="card empty">Aún no hay informes.<br>Aparecerán tras tu próximo entreno.</div>`;
   informes.forEach((f, k) => {
@@ -311,4 +321,86 @@ function vInformeDetalle(f) {
   if (f.mejoras?.length) o += `<h2>A mejorar</h2><div class="card"><ul class="lista mej">${f.mejoras.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
   if (f.proxima) o += `<div class="card proxima"><b>Para la próxima</b><div>${esc(f.proxima)}</div></div>`;
   return o;
+}
+
+
+/* =====================================================================
+   VISTA CONSULTA: prepara tu pregunta con tus datos y la abre en Claude
+   ===================================================================== */
+let consulta = { texto: "", panel: true, plan: true, informes: true, objetivos: true };
+const SUGERENCIAS = ["¿Hago la sesión de hoy tal cual o la suavizo?", "¿Cómo voy de cara a Jaén y a Guzmán?",
+  "Analiza mi último entreno y dime qué mejorar", "¿Qué como y bebo en la salida larga del domingo?",
+  "Tengo molestias en la rodilla, ¿qué cambio esta semana?", "¿Debería subir mi FTP?"];
+
+function vConsulta() {
+  return `<div class="card">
+    <div class="sub" style="margin-top:0">¿Qué quieres preguntar?</div>
+    <div class="sugs">${SUGERENCIAS.map((q, i) => `<button onclick="consulta.texto=SUGERENCIAS[${i}];pintar()">${esc(q)}</button>`).join("")}</div>
+    <textarea id="preg" placeholder="Escribe tu pregunta…" oninput="consulta.texto=this.value;const pv=document.getElementById('prev');if(pv)pv.textContent=construirConsulta()">${esc(consulta.texto)}</textarea>
+    <div class="sub">Datos que se incluyen</div>
+    <div class="incl">
+      ${[["panel", "Estado de hoy, forma, bienestar y proyección"], ["plan", "Plan de la semana con sus sesiones"],
+         ["informes", "Últimos 3 informes de entreno"], ["objetivos", "Pruebas y lesiones"]].map(([k, t]) =>
+        `<label><input type="checkbox" ${consulta[k] ? "checked" : ""} onchange="consulta.${k}=this.checked"> ${t}</label>`).join("")}
+    </div>
+    <div class="btns" style="grid-template-columns:1fr;margin:14px 0 4px"><button class="b pri" onclick="preguntarClaude()">Copiar y abrir Claude</button></div>
+    <p class="ayuda">Se copia tu pregunta con tus datos y se abre Claude. Si no aparece ya escrita, mantén pulsado el cuadro de texto y elige <b>Pegar</b>.</p>
+  </div>
+  <details class="card"><summary>Ver el texto que se enviará</summary><pre id="prev">${esc(construirConsulta())}</pre></details>`;
+}
+
+function construirConsulta() {
+  const L = [], n = (v, d = 0) => v == null ? "?" : (+v).toFixed(d);
+  L.push("Actúa como mi entrenador de ciclismo. Responde en español, de forma concreta y práctica, basándote en mis datos.");
+  L.push(`Fecha: ${new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}.`);
+  const p = panel;
+  if (consulta.panel && p) {
+    const h = p.hoy, d = p.disposicion;
+    L.push("", "## Estado actual");
+    L.push(`- FTP ${p.ftp} W${p.peso ? `, peso ${p.peso} kg (${(p.ftp / p.peso).toFixed(2)} W/kg)` : ""}.`);
+    L.push(`- Fitness (CTL) ${n(h.ctl)}, fatiga (ATL) ${n(h.atl)}, forma (TSB) ${n(h.tsb)}.`);
+    L.push(`- HRV ${n(h.hrv)} ms (media 28 d ${n(h.hrv_base)}), pulso reposo ${n(h.fc)} ppm (media ${n(h.fc_base)}), sueño ${n(h.sueno, 1)} h (media 7 d ${n(h.sueno_7, 1)}).`);
+    L.push(`- Disposición de la app: ${d.puntos}/100 (${d.texto}). ${d.factores.map(f => `${f.nombre}: ${f.texto}`).join("; ")}.`);
+    if (d.entreno_hoy) L.push(`- Hoy ya entrené: ${d.entreno_hoy.nombre}, ${d.entreno_hoy.min} min, ${d.entreno_hoy.tss} TSS${d.entreno_hoy.nota != null ? `, nota ${d.entreno_hoy.nota}/100` : ""}.`);
+    if (p.semanas?.length) L.push(`- Carga semanal (TSS, últimas 4): ${p.semanas.slice(-4).map(s => `${fCorta(s.inicio)} ${s.tss} (${s.horas} h)`).join(", ")}.`);
+    const z = p.zonas_28d || {}, t = Object.values(z).reduce((a, b) => a + b, 0);
+    if (t) L.push(`- Zonas 4 semanas: ${Object.entries(z).map(([k, v]) => `${k} ${Math.round(v / t * 100)}%`).join(", ")}.`);
+    if (p.proyeccion?.veredictos?.length) L.push(`- Proyección: ${p.proyeccion.veredictos.map(v => `${v.nombre} (${v.fecha}): fitness ${v.ctl}, forma ${v.tsb}`).join("; ")}.`);
+    if (p.adaptacion?.length) L.push(`- Ajustes del plan: ${p.adaptacion.join("; ")}.`);
+  }
+  if (consulta.objetivos && cfg) {
+    L.push("", "## Objetivos y lesiones");
+    (cfg.objetivos || []).forEach(o => L.push(`- Prueba ${o.prioridad}: ${o.nombre}, ${o.fecha}, ${o.tipo}.`));
+    const les = (cfg.lesiones || []).filter(l => l.activa);
+    L.push(les.length ? les.map(l => `- Lesión activa: ${l.zona}, ${l.gravedad}${l.nota ? ` (${l.nota})` : ""}.`).join("\n") : "- Sin lesiones activas.");
+    L.push("- Entreno además fuerza: miércoles tren superior y viernes tren inferior (1 h).");
+  }
+  if (consulta.plan && plan) {
+    L.push("", `## Plan de la semana (fase ${plan.fase}, semana ${plan.semana})`);
+    (plan.notas || []).forEach(x => L.push(`- Nota: ${x}`));
+    (plan.sesiones || []).forEach(s => L.push(`- ${fechaBonita(s.fecha)}: ${s.titulo} (${hms(s.duracion_s || 3600)}, ≈${s.tss ?? "?"} TSS). ${s.objetivo}`));
+  }
+  if (consulta.informes && informes?.length) {
+    L.push("", "## Últimos entrenos");
+    informes.slice(0, 3).forEach(f => {
+      L.push(`- ${f.fecha} ${f.nombre}: ${f.veredicto}${f.nota != null ? ` (nota ${f.nota})` : ""}, ${f.duracion_min} min, TSS ${f.tss ?? "?"}, NP ${f.np ?? "?"} W, IF ${f.if ?? "?"}, deriva ${f.decoupling ?? "?"} %${f.mantenimiento ? `, aguante 2ª mitad ${f.mantenimiento} %` : ""}.`);
+      if (f.intervalos?.length) L.push(`  Bloques: ${f.intervalos.map(i => `${i.real || "—"} (obj ${i.obj})`).join(", ")}.`);
+      if (f.mejoras?.length) L.push(`  A mejorar: ${f.mejoras.join(" ")}`);
+    });
+  }
+  L.push("", "## Mi pregunta", consulta.texto.trim() || "(escribe aquí tu pregunta)");
+  return L.join("\n");
+}
+
+async function preguntarClaude() {
+  if (!consulta.texto.trim()) { toast("Escribe primero tu pregunta"); return; }
+  const txt = construirConsulta();
+  let copiado = false;
+  try { await navigator.clipboard.writeText(txt); copiado = true; } catch {
+    const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select();
+    try { copiado = document.execCommand("copy"); } catch {} t.remove();
+  }
+  toast(copiado ? "📋 Copiado. Abriendo Claude…" : "No se pudo copiar: copia el texto de abajo", 3000);
+  const url = "https://claude.ai/new" + (txt.length < 6000 ? "?q=" + encodeURIComponent(txt) : "");
+  setTimeout(() => window.open(url, "_blank", "noopener"), 400);
 }
