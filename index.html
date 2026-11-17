@@ -85,18 +85,58 @@ a{color:var(--acc)}
 .lista li{padding:6px 0 6px 24px;position:relative;border-top:1px solid var(--line)}
 .lista li::before{position:absolute;left:0;top:6px}
 .lista.ok li::before{content:"👍"} .lista.mej li::before{content:"💡"}
+/* --- gráficos --- */
+.graf{position:relative;touch-action:pan-y}
+.graf svg{width:100%;display:block}
+.gt{font-size:10.5px;fill:#8b95a5;font-family:system-ui,sans-serif}
+.tip{position:absolute;top:2px;background:#0b0e13;border:1px solid var(--line);border-radius:10px;padding:6px 9px;font-size:12px;line-height:1.5;pointer-events:none;white-space:nowrap;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.tip i,.leyenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.leyenda{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:0 0 6px}
+.sub{font-size:12.5px;font-weight:600;margin:12px 0 2px}.sub:first-child{margin-top:0}
+.ayuda{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+.chips.c4{grid-template-columns:repeat(4,1fr);margin:0 0 12px}.chips.c4 .chip b{font-size:16px}
+.anillo{position:relative;display:inline-flex;flex-direction:column;align-items:center;flex:none}
+.ring{position:relative}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-weight:800}
+.anillo span{font-size:11px;color:var(--mut);margin-top:3px;text-align:center;line-height:1.2}
+.ring.libre{background:var(--card2);border-radius:50%}
+.anillos{display:flex;justify-content:space-around;gap:8px;margin-top:12px}
+.hero .big{font-size:21px}
+.factores{display:grid;gap:6px;margin-top:12px}
+.fac{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:center;font-size:13px;background:var(--card2);border-radius:10px;padding:7px 9px}
+.est{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 8px 3px 4px;border-radius:99px;white-space:nowrap}
+.est b{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;font-size:10px;color:#111}
+.est-good{background:rgba(12,163,12,.16);color:#5fd35f}.est-good b{background:#0ca30c}
+.est-warning{background:rgba(250,178,25,.15);color:#fab219}.est-warning b{background:#fab219}
+.est-serious{background:rgba(236,131,90,.16);color:#ec835a}.est-serious b{background:#ec835a}
+.est-critical{background:rgba(208,59,59,.18);color:#f07a7a}.est-critical b{background:#d03b3b;color:#fff}
+.cuenta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.cd{text-align:center;padding:12px 10px}.cd>b{font-size:30px;color:var(--acc);display:block;line-height:1}.cd>span{font-size:11px;color:var(--mut)}
+.zbar{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden;margin-bottom:10px}.zbar i{display:block;min-width:2px}
+.zfilas{display:grid;gap:4px}.zf{display:grid;grid-template-columns:1fr 54px 64px;font-size:13px;align-items:center}
+.zf i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}.zf b{text-align:right}.zf .mut{text-align:right;font-size:12px}
+.fila{display:flex;align-items:center;gap:12px;cursor:pointer}
+.veredicto{font-weight:700;margin-top:8px;font-size:15px}
+.comp .big{font-size:26px;margin-right:10px}
+.bul{padding:9px 0;border-top:1px solid var(--line)}.bul:first-child{border-top:0;padding-top:0}
+.bul .row{gap:8px}
+.pista{position:relative;height:12px;background:var(--card2);border-radius:6px;margin:7px 0 4px;overflow:hidden}
+.pista i{position:absolute;top:0;bottom:0;border-radius:6px}
+.pista .obj{background:rgba(255,255,255,.22);z-index:2;border-left:2px solid #fff;border-right:2px solid #fff;border-radius:2px}
+.pista .real{left:0;opacity:.9}
+.proxima{border-left:3px solid var(--acc)}.proxima b{display:block;margin-bottom:4px;color:var(--acc)}
 </style>
 </head>
 <body>
 <header><h1>🚴 Entrenos por vatios</h1><span class="pill" id="modo">—</span></header>
 <main id="vista"></main>
 <nav id="nav">
-  <button data-t="plan" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M6 16v-5M10 16V7M14 16v-3M18 16V9"/></svg>Plan</button>
+  <button data-t="panel" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>Panel</button>
+  <button data-t="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Plan</button>
   <button data-t="informes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Informes</button>
-  <button data-t="lesiones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>Lesiones</button>
-  <button data-t="pruebas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Pruebas</button>
-  <button data-t="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Ajustes</button>
+  <button data-t="objetivos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Objetivos</button>
+  <button data-t="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button>
 </nav>
+<script src="graficos.js"></script>
 
 <script>
 "use strict";
@@ -106,7 +146,7 @@ const LS = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
 };
 let conn = LS.get("conn", { owner: "", repo: "entrenos-auto", token: "" });
-let cfg = null, cfgSha = null, plan = null, informes = [], tab = "plan", ultimaRun = null, sondeo = null;
+let cfg = null, cfgSha = null, plan = null, informes = [], panel = null, tab = "panel", ultimaRun = null, sondeo = null;
 const demo = () => !conn.token;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -142,7 +182,7 @@ async function leerArchivo(nombre) {
 async function cargar() {
   if (demo()) {
     $("#modo").textContent = "demo";
-    [plan, cfg, informes] = await Promise.all(["demo_plan.json", "demo_config.json", "demo_informes.json"].map(f => fetch(f).then(r => r.json())));
+    [plan, cfg, informes, panel] = await Promise.all(["demo_plan.json", "demo_config.json", "demo_informes.json", "demo_panel.json"].map(f => fetch(f).then(r => r.json())));
     pintar(); return;
   }
   $("#modo").textContent = conn.repo;
@@ -151,6 +191,7 @@ async function cargar() {
   } catch (e) { toast("No pude leer config.json: " + e.message, 4000); }
   try { plan = (await leerArchivo("ultimo_plan.json")).json; } catch { plan = null; }
   try { informes = (await leerArchivo("informes.json")).json; } catch { informes = []; }
+  try { panel = (await leerArchivo("panel.json")).json; } catch { panel = null; }
   try { await estadoRun(); } catch {}
   pintar();
 }
@@ -291,42 +332,6 @@ function vPlan() {
   return h;
 }
 
-function vInformes() {
-  let h = `<div class="btns" style="grid-template-columns:1fr 1fr"><button class="b" onclick="cargar()">↻ Actualizar</button><button class="b pri" onclick="lanzarInforme()">🔍 Analizar ya</button></div>
-    <p class="mut sm" style="margin:-2px 4px 12px">Se analiza solo cada hora (de 7 a 23 h) cuando subes un entreno de bici.</p>`;
-  if (!informes.length) return h + `<div class="card empty">Aún no hay informes.<br>Aparecerán tras tu próximo entreno.</div>`;
-  const n = (v, d = 0) => v == null ? null : (+v).toFixed(d);
-  for (const f of informes) {
-    const col = f.nota == null ? "var(--mut)" : f.nota >= 85 ? "var(--ok)" : f.nota >= 60 ? "var(--warn)" : "var(--bad)";
-    const chips = [["Duración", f.duracion_min + "'"], ["TSS", n(f.tss)], ["NP", n(f.np) && n(f.np) + " W"], ["IF", n(f.if, 2)],
-                   ["FC media", n(f.fc_media)], ["Deriva", f.decoupling != null ? f.decoupling + " %" : null]].filter(c => c[1]);
-    h += `<div class="card">
-      <div class="row">
-        <div class="sp"><div class="ses-date">${f.fecha ? fechaBonita(f.fecha) : ""}</div>
-          <div class="ses-title">${esc(f.nombre)}</div>
-          <div class="mut sm">${f.planificado ? "Plan: " + esc(f.planificado) : "Sin sesión planificada"}</div></div>
-        ${f.nota != null ? `<div class="nota" style="border:3px solid ${col};color:${col}">${f.nota}</div>` : ""}
-      </div>
-      <div style="margin-top:8px;font-weight:700">${esc(f.veredicto)}</div>
-      <div class="chips">${chips.map(c => `<div class="chip"><b>${esc(c[1])}</b><span>${c[0]}</span></div>`).join("")}</div>`;
-    if (f.intervalos && f.intervalos.length) {
-      const ref = Math.max(...f.intervalos.map(i => parseInt(i.obj.split(/[–\s]/)[0]) || 1)) * 1.25;
-      const colEst = { ok: "var(--ok)", alto: "var(--z5)", bajo: "var(--warn)", "no hecho": "var(--bad)" };
-      h += `<div class="ivs"><div class="mut sm">Bloques de trabajo (objetivo → real)</div>` + f.intervalos.map(i => {
-        const w = parseInt(i.real) || 0;
-        return `<div class="iv"><b>${i.n}</b>
-          <div><div class="bar"><i style="width:${Math.min(100, w / ref * 100)}%;background:${colEst[i.estado]}"></i></div>
-          <div class="mut" style="font-size:11.5px;margin-top:2px">obj. ${esc(i.obj)}${i.fc ? ` · ${i.fc} ppm` : ""}</div></div>
-          <div style="text-align:right;font-weight:700;color:${colEst[i.estado]}">${esc(i.real || "—")}</div></div>`;
-      }).join("") + `</div>`;
-    }
-    if (f.logros && f.logros.length) h += `<ul class="lista ok">${f.logros.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
-    if (f.mejoras && f.mejoras.length) h += `<ul class="lista mej">${f.mejoras.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
-    h += `</div>`;
-  }
-  return h;
-}
-
 const ZONAS_LES = ["rodilla", "lumbar", "cadera", "tobillo", "general"];
 function vLesiones() {
   const ls = cfg.lesiones = cfg.lesiones || [];
@@ -371,6 +376,10 @@ function vPruebas() {
   return h;
 }
 
+function vObjetivos() {
+  return `<h2 style="margin-top:4px">Pruebas</h2>` + vPruebas() + `<h2>Lesiones y molestias</h2>` + vLesiones();
+}
+
 function vAjustes() {
   const p = cfg.planificacion, a = cfg.atleta;
   return `<h2>Entrenamiento</h2><div class="card">
@@ -405,24 +414,28 @@ function toggleDia(i) {
 async function conectar() {
   conn = { owner: $("#c-owner").value.trim(), repo: $("#c-repo").value.trim(), token: $("#c-token").value.trim() };
   if (!conn.owner || !conn.repo || !conn.token) { toast("Rellena los tres campos"); return; }
-  try { await gh(repo()); LS.set("conn", conn); toast("✅ Conectado"); tab = "plan"; marcarNav(); await cargar(); }
+  try { await gh(repo()); LS.set("conn", conn); toast("✅ Conectado"); tab = "panel"; marcarNav(); await cargar(); }
   catch (e) { toast("No conecta: " + e.message, 4500); }
 }
 function desconectar() { conn = { ...conn, token: "" }; LS.set("conn", conn); cargar(); }
 
 function pintar() {
   if (!cfg) { $("#vista").innerHTML = `<div class="card empty">Cargando…</div>`; return; }
-  $("#vista").innerHTML = ({ plan: vPlan, informes: vInformes, lesiones: vLesiones, pruebas: vPruebas, ajustes: vAjustes })[tab]();
+  for (const k in GRAF) delete GRAF[k];
+  $("#vista").innerHTML = ({ panel: vPanel, plan: vPlan, informes: vInformes, objetivos: vObjetivos, ajustes: vAjustes })[tab]();
   pintarRun();
-  if (demo() && tab === "plan") $("#vista").insertAdjacentHTML("afterbegin",
+  activarGraficos();
+  if (demo() && (tab === "plan" || tab === "panel")) $("#vista").insertAdjacentHTML("afterbegin",
     `<div class="note" style="margin:0 0 12px">Modo demo con datos de ejemplo. Conecta tu repositorio en <b>Ajustes</b>.</div>`);
 }
 function marcarNav() { document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.t === tab)); }
 $("#nav").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  tab = b.dataset.t; marcarNav(); pintar(); window.scrollTo(0, 0);
+  tab = b.dataset.t; informeAbierto = null; marcarNav(); pintar(); window.scrollTo(0, 0);
 });
 
+let anchoPrevio = window.innerWidth;
+window.addEventListener("resize", () => { if (Math.abs(window.innerWidth - anchoPrevio) > 40) { anchoPrevio = window.innerWidth; pintar(); } });
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 cargar();
 </script>

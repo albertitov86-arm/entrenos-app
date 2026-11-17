@@ -1,7 +1,7 @@
 // Service worker: la app abre sin conexión; los datos (GitHub) siempre van a la red.
-const CACHE = "entrenos-v2";
+const CACHE = "entrenos-v3";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png",
-               "demo_plan.json", "demo_config.json", "demo_informes.json"];
+               "graficos.js", "demo_plan.json", "demo_config.json", "demo_informes.json", "demo_panel.json"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));
